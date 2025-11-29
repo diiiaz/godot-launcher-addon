@@ -22,7 +22,7 @@ func _enter_tree() -> void:
 		push_error(ERROR_PREFFIX + LAUNCHER_NOT_FOUND_ERROR)
 		return
 	
-	var launcher_uri: String = UserDataManager.get_user_data(UserData.USER_DATA.LATEST_OPENED_LAUNCHER_PATH)
+	var launcher_uri: String = get_latest_opened_launcher_path()
 	project_popup_menu.add_item(TranslationServer.get_translation_object(TranslationServer.get_tool_locale()).get_message("QUIT_TO_LAUNCHER"))
 	quit_to_launcher_index = project_popup_menu.item_count - 1
 	project_popup_menu.set_item_disabled(quit_to_launcher_index, not FileAccess.file_exists(launcher_uri))
@@ -48,3 +48,15 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED:
 		if DirAccess.dir_exists_absolute(launcher_user_path):
 			project_popup_menu.set_item_text(quit_to_launcher_index, TranslationServer.get_translation_object(TranslationServer.get_tool_locale()).get_message("QUIT_TO_LAUNCHER"))
+
+
+func get_latest_opened_launcher_path() -> String:
+	var file_path: String = launcher_user_path.path_join("latest_opened_launcher_path.json")
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	
+	var dict: Dictionary = JSON.parse_string(file.get_as_text())
+	
+	if dict == null:
+		return ""
+	
+	return dict.path
