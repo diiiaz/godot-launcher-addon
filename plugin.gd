@@ -23,7 +23,7 @@ func _enter_tree() -> void:
 		return
 	
 	var launcher_uri: String = get_latest_opened_launcher_path()
-	project_popup_menu.add_item(TranslationServer.get_translation_object(TranslationServer.get_tool_locale()).get_message("QUIT_TO_LAUNCHER"))
+	project_popup_menu.add_item("Quit to Launcher")
 	quit_to_launcher_index = project_popup_menu.item_count - 1
 	project_popup_menu.set_item_disabled(quit_to_launcher_index, not FileAccess.file_exists(launcher_uri))
 	project_popup_menu.id_pressed.connect(
@@ -42,12 +42,6 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	if quit_to_launcher_index == project_popup_menu.item_count - 1:
 		project_popup_menu.remove_item(quit_to_launcher_index)
-
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_TRANSLATION_CHANGED:
-		if DirAccess.dir_exists_absolute(launcher_user_path):
-			project_popup_menu.set_item_text(quit_to_launcher_index, TranslationServer.get_translation_object(TranslationServer.get_tool_locale()).get_message("QUIT_TO_LAUNCHER"))
 
 
 func get_latest_opened_launcher_path() -> String:
