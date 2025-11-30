@@ -34,8 +34,8 @@ func _enter_tree() -> void:
 				EditorInterface.get_editor_toaster().push_toast(ERROR_PREFFIX + LAUNCHER_PATH_INCORRECT_ERROR, EditorToaster.SEVERITY_ERROR)
 				push_error(ERROR_PREFFIX + LAUNCHER_PATH_INCORRECT_ERROR)
 				return
-			get_tree().quit()
-			OS.shell_open(launcher_uri)
+			OS.create_process(ProjectSettings.globalize_path(launcher_uri), [])
+			EditorInterface.get_base_control().get_tree().quit()
 	)
 
 
